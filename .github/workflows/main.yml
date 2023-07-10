@@ -19,14 +19,8 @@ jobs:
 
       - name: Get Kubernetes pods
         run: kubectl get services --all-namespaces
-
-      - name: Get Minikube IP
-        run: echo ${{ steps.minikube.outputs.ip }}
-
-      - name: Get Docker containers
-        run: docker ps
-
-      - name: Get Helm releases
+        
+      - name: Install wordpress
         uses: hiberbee/github-action-helm@latest
         with:
-          helm-command: list
+          helm-command: install app-wp1 bitnami/wordpress

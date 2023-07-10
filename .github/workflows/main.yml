@@ -20,6 +20,11 @@ jobs:
       - name: Get Kubernetes pods
         run: kubectl get services --all-namespaces
         
+      - name: Add a chart repository
+        uses: WyriHaximus/github-action-helm3@v3
+        with:
+          exec: helm repo add bitnami https://charts.bitnami.com/bitnami
+        
       - name: Install wordpress
         uses: WyriHaximus/github-action-helm3@v3
         with:

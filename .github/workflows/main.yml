@@ -20,6 +20,12 @@ jobs:
       - name: Get Kubernetes pods
         run: kubectl get services --all-namespaces
         
+      - name: checkout repo
+        uses: actions/checkout@v3
+        
+      - name: Create namespace sandbox
+        run: kubectl create -f sandbox-namespace.yml
+        
       - name: Add a chart repository
         uses: WyriHaximus/github-action-helm3@v3
         with:

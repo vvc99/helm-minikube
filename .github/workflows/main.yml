@@ -1,8 +1,8 @@
-name: Minikube workflow
+name: Deploy WordPress on Minikube
 on: push
 jobs:
   minikube:
-    name: Start Kubernetes cluster
+    name: Deploy WordPress on Minikube
     runs-on: ubuntu-20.04
     steps:
       - name: Start Minikube
@@ -20,23 +20,33 @@ jobs:
       - name: Get Kubernetes pods
         run: kubectl get services --all-namespaces
         
+      - name: Add a chart repository
+        uses: WyriHaximus/github-action-helm3@v3
+        with:
+          exec: helm repo add bitnami https://charts.bitnami.com/bitnami
+          
+      - name: Install WordPress (namespace=default)
+        uses: WyriHaximus/github-action-helm3@v3
+        with:
+          exec: helm install app-wp1 bitnami/wordpress
+          
       - name: Checkout repo
         uses: actions/checkout@v3
         
       - name: Create namespace sandbox
         run: kubectl create -f sandbox-namespace.yml
-        
-      - name: Add a chart repository
-        uses: WyriHaximus/github-action-helm3@v3
-        with:
-          exec: helm repo add bitnami https://charts.bitnami.com/bitnami
-        
-      - name: Install wordpress
-        uses: WyriHaximus/github-action-helm3@v3
-        with:
-          exec: helm install app-wp1 bitnami/wordpress --namespace=sandbox
           
-      - name: Get Helm releases
+      - name: Install WordPress (namespace=sandbox)
+        uses: WyriHaximus/github-action-helm3@v3
+        with:
+          exec: helm install app-wp2 bitnami/wordpress --namespace=sandbox
+          
+      - name: Get Helm releases (namespace=default)
+        uses: WyriHaximus/github-action-helm3@v3
+        with:
+          exec: helm list
+          
+      - name: Get Helm releases (namespace=sandbox)
         uses: WyriHaximus/github-action-helm3@v3
         with:
           exec: helm list --namespace=sandbox

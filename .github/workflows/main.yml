@@ -20,6 +20,9 @@ jobs:
       - name: Get Kubernetes pods
         run: kubectl get services --all-namespaces
         
+      - name: Checkout repo
+        uses: actions/checkout@v3
+        
       - name: Create namespace sandbox
         run: kubectl create -f sandbox-namespace.yml
         
@@ -31,9 +34,9 @@ jobs:
       - name: Install wordpress
         uses: WyriHaximus/github-action-helm3@v3
         with:
-          exec: helm install app-wp1 bitnami/wordpress
+          exec: helm install app-wp1 bitnami/wordpress --namespace=sandbox
           
       - name: Get Helm releases
         uses: WyriHaximus/github-action-helm3@v3
         with:
-          exec: helm list
+          exec: helm list --namespace=sandbox

@@ -23,9 +23,9 @@ jobs:
       - name: Install wordpress
         uses: hiberbee/github-action-helm@latest
         with:
-          helm-command: install app-wp1 bitnami/wordpress
+          exec: helm install app-wp1 bitnami/wordpress
           
       - name: Get Helm releases
         uses: hiberbee/github-action-helm@latest
         with:
-          helm-command: list
+          exec: helm list

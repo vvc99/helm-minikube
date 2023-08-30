@@ -5,6 +5,9 @@ jobs:
     name: Deploy WordPress on Minikube
     runs-on: ubuntu-20.04
     steps:
+      - name: Checkout repo
+        uses: actions/checkout@v3
+        
       - name: Start Minikube
         id: minikube
         uses: hiberbee/github-action-minikube@latest
@@ -29,9 +32,6 @@ jobs:
         uses: WyriHaximus/github-action-helm3@v3
         with:
           exec: helm install app-wp1 bitnami/wordpress
-          
-      - name: Checkout repo
-        uses: actions/checkout@v3
         
       - name: Create namespace sandbox
         run: kubectl create -f sandbox-namespace.yml
